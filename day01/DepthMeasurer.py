@@ -15,3 +15,11 @@ class DepthMeasurer:
             if x < y:
                 counter += 1
         return counter
+
+    def group_by_window(self, window_size) -> list:
+        grouped_data = [sum(self.measures[i:i+window_size]) for i in range(0, len(self.measures), 1) if len(self.measures) >= i + window_size]
+        return grouped_data
+
+    def increases_in_windows_of_three(self) -> int:
+        self.measures = self.group_by_window(3)
+        return self.increases_counter()
