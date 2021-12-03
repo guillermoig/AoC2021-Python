@@ -15,7 +15,7 @@ class TestNavigator(unittest.TestCase):
     def tearDown(self):
         self.file.close()
         os.remove('data_test')
-        return super().setUp()
+        return super().tearDown()
 
     def test_partOne(self):
         self.assertEqual(self.navigator.part_one(), 150)

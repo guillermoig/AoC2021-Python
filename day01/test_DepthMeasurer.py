@@ -15,7 +15,7 @@ class TestDepthMeasurer(unittest.TestCase):
     def tearDown(self):
         self.file.close()
         os.remove('data_test')
-        return super().setUp()
+        return super().tearDown()
 
     def test_setMeasures(self):
         self.depth_measurer.set_measures("1\n23\n45")
