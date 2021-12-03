@@ -5,11 +5,11 @@ from Navigator import Navigator
 class TestNavigator(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.navigator = Navigator()
         self.file = open('data_test', 'w')
         self.file.write("forward 5\ndown 5\nforward 8\nup 3\ndown 8\nforward 2")
         self.file.close()
         self.file = open('data_test', 'r')
+        self.navigator = Navigator(self.file.read())
         return super().setUp()
 
     def tearDown(self):
@@ -17,17 +17,11 @@ class TestNavigator(unittest.TestCase):
         os.remove('data_test')
         return super().setUp()
 
-    def test_setCourseInstructions(self):
-        self.navigator.set_course_instructions(self.file.read())
-        self.assertEqual(self.navigator.get_set_instructions(), {'forward': [5, 8, 2], 'down': [5, 8], 'up': [3]})
+    def test_partOne(self):
+        self.assertEqual(self.navigator.part_one(), 150)
 
-    def test_positionCalculator(self):
-        self.navigator.set_course_instructions(self.file.read())
-        self.assertEqual(self.navigator.position_calculator(), {'horizontal': 15, 'depth': 10})
-
-    def test_getPositionMultiplication(self):
-        self.navigator.set_course_instructions(self.file.read())
-        self.assertEqual(self.navigator.get_position_multiplication(), 150)
+    def test_partTwo(self):
+        self.assertEqual(self.navigator.part_two(), 900)
 
 if __name__ == '__main__':
     unittest.main()
