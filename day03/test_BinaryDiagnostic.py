@@ -30,9 +30,17 @@ class TestBinaryDiagnostic(unittest.TestCase):
     def test_partOne(self):
         self.assertEqual(self.binary_diagnostic.part_one(), 198)
 
-    # def test_partTwo(self):
-    #     # self.assertEqual(self.binary_diagnostic.part_two(), )
-    #     pass
+    def test_getBitsCounter(self):
+        self.assertEqual(self.binary_diagnostic.get_bits_counter(self.binary_diagnostic.data, 0), [('1', 7), ('0', 5)])
+
+    def test_getOxygenGeneratorRating(self):
+        self.assertEqual(self.binary_diagnostic.get_oxygen_generator_rating(), 23)
+
+    def test_getCo2ScrubberRating(self):
+        self.assertEqual(self.binary_diagnostic.get_co2_scrubber_rating(), 10)
+
+    def test_partTwo(self):
+        self.assertEqual(self.binary_diagnostic.part_two(), 230)
 
 if __name__ == '__main__':
     unittest.main()
