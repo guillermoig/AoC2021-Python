@@ -1,7 +1,5 @@
-from collections import Counter
 from DataReader import DataReader
 from BingoBoard import BingoBoard
-import re
 
 class BingoManager:
     def __init__(self, data_reader: DataReader) -> None:
