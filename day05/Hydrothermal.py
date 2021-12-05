@@ -12,21 +12,36 @@ class Hydrothermal:
         pairs_of_points = [sorted([[int(x) for x in point.split(",")][::-1] for point in pair]) for pair in pairs_of_pairs]
         return sorted(pairs_of_points)
 
-    def get_line_list(self, pair_of_points) -> list:
+    def get_horizontal_vertical_lines(self, pair_of_points) -> list:
         line_list = [[0] * self.max_number_items for _ in range(self.max_number_items)]
         for pair in self.pair_of_points:
             if (pair[0][0] != pair[1][0]) and (pair[0][1] != pair[1][1]):
                 continue
-            y_range = range(pair[0][0], pair[0][0] + 1) if pair[0][0] == pair[1][0] else range(pair[0][0], pair[1][0] + 1)
-            x_range = range(pair[0][1], pair[0][1] + 1) if pair[0][1] == pair[1][1] else range(pair[0][1], pair[1][1] + 1)
+            y_range = range(pair[0][0], pair[1][0] + 1) if pair[0][0] < pair[1][0] else range(pair[0][0], pair[1][0] - 1, -1)
+            x_range = range(pair[0][1], pair[1][1] + 1) if pair[0][1] < pair[1][1] else range(pair[0][1], pair[1][1] - 1, -1)
             for y in y_range:
                 for x in x_range:
                     line_list[y][x] += 1
         return line_list
 
     def part_one(self) -> int:
-        line_list = np.array(self.get_line_list(self.pair_of_points))
+        line_list = np.array(self.get_horizontal_vertical_lines(self.pair_of_points))
         return (line_list > 1).sum()
 
+    def get_horizontal_vertical_diagonal_lines(self, pair_of_points) -> list:
+        line_list = [[0] * self.max_number_items for _ in range(self.max_number_items)]
+        for pair in self.pair_of_points:
+            y_range = range(pair[0][0], pair[1][0] + 1) if pair[0][0] < pair[1][0] else range(pair[0][0], pair[1][0] - 1, -1)
+            x_range = range(pair[0][1], pair[1][1] + 1) if pair[0][1] < pair[1][1] else range(pair[0][1], pair[1][1] - 1, -1)
+            if (pair[0][0] == pair[1][0]) or (pair[0][1] == pair[1][1]):
+                for y in y_range:
+                    for x in x_range:
+                        line_list[y][x] += 1
+            elif (abs(pair[0][0] - pair[1][0]) == abs(pair[0][1] - pair[1][1])):
+                for y, x in zip(y_range, x_range):
+                    line_list[y][x] += 1
+        return line_list
+
     def part_two(self) -> int:
-        return 0
+        line_list = np.array(self.get_horizontal_vertical_diagonal_lines(self.pair_of_points))
+        return (line_list > 1).sum()
