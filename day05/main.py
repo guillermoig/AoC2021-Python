@@ -4,9 +4,9 @@ import re
 
 def main():
     data_reader = DataReader("data")
-    bingo_manager = Hydrothermal(data_reader)
-    print("Solution to part one: ", bingo_manager.part_one())
-    print("Solution to part two: ", bingo_manager.part_two())
+    hydrothermal = Hydrothermal(data_reader)
+    print("Solution to part one: ", hydrothermal.part_one())
+    print("Solution to part two: ", hydrothermal.part_two())
 
 if __name__ == "__main__":
     main()

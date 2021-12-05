@@ -7,7 +7,7 @@ class TestHydrothermal(unittest.TestCase):
     def setUp(self) -> None:
         data_reader = DataReader("data_test")
         self.hydrothermal = Hydrothermal(data_reader)
-        self.line_list = [
+        self.hor_ver_lines = [
             [0,0,0,0,0,0,0,1,0,0],
             [0,0,1,0,0,0,0,1,0,0],
             [0,0,1,0,0,0,0,1,0,0],
@@ -19,6 +19,18 @@ class TestHydrothermal(unittest.TestCase):
             [0,0,0,0,0,0,0,0,0,0],
             [2,2,2,1,1,1,0,0,0,0]
         ]
+        self.hor_ver_dia_lines = [
+            [1,0,1,0,0,0,0,1,1,0],
+            [0,1,1,1,0,0,0,2,0,0],
+            [0,0,2,0,1,0,1,1,1,0],
+            [0,0,0,1,0,2,0,2,0,0],
+            [0,1,1,2,3,1,3,2,1,1],
+            [0,0,0,1,0,2,0,0,0,0],
+            [0,0,1,0,0,0,1,0,0,0],
+            [0,1,0,0,0,0,0,1,0,0],
+            [1,0,0,0,0,0,0,0,1,0],
+            [2,2,2,1,1,1,0,0,0,0]
+        ]
         return super().setUp()
 
     def test_getPairOfPoints(self):
@@ -27,14 +39,17 @@ class TestHydrothermal(unittest.TestCase):
     def test_getMaxNumberItems(self):
         self.assertEqual(self.hydrothermal.max_number_items, 10)
 
-    def test_getLineList(self):
-        self.assertEqual(self.hydrothermal.get_line_list(self.hydrothermal.pair_of_points), self.line_list)
+    def test_getHorizontalVerticalLines(self):
+        self.assertEqual(self.hydrothermal.get_horizontal_vertical_lines(self.hydrothermal.pair_of_points), self.hor_ver_lines)
 
     def test_partOne(self):
         self.assertEqual(self.hydrothermal.part_one(), 5)
 
-    # def test_partTwo(self):
-    #     self.assertEqual(self.hydrothermal.part_two(), 0)
+    def test_getHorizontalVerticalDiagonalLines(self):
+        self.assertEqual(self.hydrothermal.get_horizontal_vertical_diagonal_lines(self.hydrothermal.pair_of_points), self.hor_ver_dia_lines)
+
+    def test_partTwo(self):
+        self.assertEqual(self.hydrothermal.part_two(), 12)
 
 if __name__ == '__main__':
     unittest.main()
