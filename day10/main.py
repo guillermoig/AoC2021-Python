@@ -1,11 +1,11 @@
 from DataReader import DataReader
-from SmokeBasiner import SmokeBasiner
+from SyntaxScoring import SyntaxScoring
 
 def main():
     data_reader = DataReader("data")
-    smokeBasiner = SmokeBasiner(data_reader)
-    print("Solution to part one: ", smokeBasiner.part_one())
-    print("Solution to part two: ", smokeBasiner.part_two())
+    syntaxScoring = SyntaxScoring(data_reader)
+    print("Solution to part one: ", syntaxScoring.part_one())
+    print("Solution to part two: ", syntaxScoring.part_two())
 
 if __name__ == "__main__":
     main()
