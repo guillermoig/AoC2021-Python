@@ -1,25 +1,12 @@
 from unittest.loader import defaultTestLoader
-
-from networkx.readwrite import graph6
 from DataReader import DataReader
-import networkx as nx
-import matplotlib.pyplot as plt
 
 class PassagePathing:
     def __init__(self, data_reader: DataReader) -> None:
-        self.path_dictionary = self.set_path_dictionary(data_reader)
-        self.graph = self.set_graph(data_reader)
+        self.nodes_edges = self.set_nodes_edges(data_reader)
+        self.lower_nodes = [char for char in self.nodes_edges if char.islower() and char != 'start']
 
-    def set_graph(self, data_reader: DataReader):
-        graph = nx.Graph()
-        for line in data_reader.get_all_data().splitlines():
-            edge = line.split("-")
-            graph.add_edge(edge[0], edge[1])
-        # nx.draw(graph, with_labels=True)
-        # plt.show()
-        return graph
-
-    def set_path_dictionary(self, data_reader) -> dict:
+    def set_nodes_edges(self, data_reader) -> dict:
         path_dict = {}
         for line in data_reader.get_all_data().splitlines():
             source = line.split("-")[0]
@@ -36,18 +23,46 @@ class PassagePathing:
                     path_dict[destination] = [source]
         return path_dict
 
-    def get_all_paths(self) -> list:
-        all_paths = []
-        # all_paths = nx.all_shortest_paths(self.graph, source='start', target='end')
-        all_simple_paths = nx.all_simple_paths(self.graph, 'start', 'end')
-        for path in all_simple_paths:
-            all_paths.append(path)
-            print(path)
-        return all_paths
+    def get_all_paths_part_one(self, source: str, destination: str, prev_nodes_visited: dict = {}) -> list:
+        nodes_visited = prev_nodes_visited.copy()
+        if source == destination:
+            return [[destination]]
+        paths = []
+        nodes_visited[source] = 1 if source not in nodes_visited else nodes_visited[source] + 1
+        for value in self.nodes_edges[source]:
+            if value in nodes_visited and nodes_visited[value] == 1 and value in self.lower_nodes:
+                continue
+            sub_paths = self.get_all_paths_part_one(value, destination, nodes_visited)
+            for path in sub_paths:
+                new_path = [source] + path
+                paths.append(new_path)
+        return paths
 
     def part_one(self) -> int:
-        paths = self.get_all_paths()
+        paths = self.get_all_paths_part_one('start', 'end')
         return len(paths)
 
+    def has_lower_repeated(self, value: str, nodes_visited: dict) -> bool:
+        for node in nodes_visited:
+            if node in self.lower_nodes and node != value and nodes_visited[node] == 2:
+                return True
+        return False
+
+    def get_all_paths_part_two(self, source: str, destination: str, prev_nodes_visited: dict = {}) -> list:
+        nodes_visited = prev_nodes_visited.copy()
+        if source == destination:
+            return [[destination]]
+        paths = []
+        nodes_visited[source] = 1 if source not in nodes_visited else nodes_visited[source] + 1
+        for value in self.nodes_edges[source]:
+            if value in nodes_visited and value in self.lower_nodes and (nodes_visited[value] == 2 or self.has_lower_repeated(value, nodes_visited)):
+                continue
+            sub_paths = self.get_all_paths_part_two(value, destination, nodes_visited)
+            for path in sub_paths:
+                new_path = [source] + path
+                paths.append(new_path)
+        return paths
+
     def part_two(self) -> int:
-        return 0
+        paths = self.get_all_paths_part_two('start', 'end')
+        return len(paths)
